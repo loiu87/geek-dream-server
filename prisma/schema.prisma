@@ -22,4 +22,13 @@ model User {
   password String  @default("")
   name     String?
   posts    Post[]
+  sheets   Sheet[]
+}
+
+model Sheet {
+  id        Int     @default(autoincrement()) @id
+  content   String?
+  owner     User?   @relation(fields: [ownerId], references: [id])
+  ownerId   Int?
+  createdAt DateTime
 }

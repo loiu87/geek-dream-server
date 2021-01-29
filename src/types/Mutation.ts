@@ -8,15 +8,13 @@ export const Mutation = mutationType({
     t.field('signup', {
       type: 'AuthPayload',
       args: {
-        name: stringArg(),
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
       },
-      resolve: async (_parent, { name, email, password }, ctx) => {
+      resolve: async (_parent, { email, password }, ctx) => {
         const hashedPassword = await hash(password, 10)
         const user = await ctx.prisma.user.create({
           data: {
-            name,
             email,
             password: hashedPassword,
           },
