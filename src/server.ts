@@ -7,8 +7,6 @@ const server = new ApolloServer({
   context: createContext,
 })
 
-server.listen().then(({ url }) =>
-  console.log(
-    `🚀 Server ready at: ${url}\n⭐️ See sample queries: http://pris.ly/e/ts/graphql-auth#using-the-graphql-api`,
-  ),
-)
+server
+  .listen()
+  .then(({ url }) => console.log(`🚀 Server ready at: ${url}\n⭐️`))

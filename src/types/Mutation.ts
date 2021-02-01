@@ -38,6 +38,7 @@ export const Mutation = mutationType({
             email,
           },
         })
+        console.log(user)
         if (!user) {
           throw new Error(`No user found for email: ${email}`)
         }
@@ -49,6 +50,37 @@ export const Mutation = mutationType({
           token: sign({ userId: user.id }, APP_SECRET),
           user,
         }
+      },
+    })
+
+    t.field('createSheet', {
+      type: 'Sheet',
+      args: {
+        fileName: stringArg(),
+        content: stringArg(),
+      },
+      resolve: (parent, { fileName, content }, ctx) => {
+        const userId = getUserId(ctx)
+        if (!userId) throw new Error('Could not authenticate user.')
+        return ctx.prisma.sheet.create({
+          data: {
+            fileName,
+            content,
+            owner: { connect: { id: Number(userId) } },
+          },
+        })
+      },
+    })
+
+    t.nullable.field('getSheet', {
+      type: 'Sheet',
+      args: { id: intArg() },
+      resolve: (parent, { id }, ctx) => {
+        return ctx.prisma.sheet.findUnique({
+          where: {
+            id: Number(id),
+          },
+        })
       },
     })
 

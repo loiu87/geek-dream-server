@@ -15,6 +15,19 @@ export const Query = queryType({
       },
     })
 
+    t.list.field('getSheets', {
+      type: 'Sheet',
+      resolve: (parent, args, ctx) => {
+        console.log(ctx.req.get('Authorization'))
+        const userId = getUserId(ctx)
+        return ctx.prisma.sheet.findMany({
+          where: { ownerId: Number(userId) },
+          orderBy: { createdAt: 'desc' },
+          take: 10,
+        })
+      },
+    })
+
     t.list.field('feed', {
       type: 'Post',
       resolve: (parent, args, ctx) => {
