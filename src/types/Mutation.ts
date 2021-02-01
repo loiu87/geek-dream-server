@@ -83,50 +83,5 @@ export const Mutation = mutationType({
         })
       },
     })
-
-    t.field('createDraft', {
-      type: 'Post',
-      args: {
-        title: nonNull(stringArg()),
-        content: stringArg(),
-      },
-      resolve: (parent, { title, content }, ctx) => {
-        const userId = getUserId(ctx)
-        if (!userId) throw new Error('Could not authenticate user.')
-        return ctx.prisma.post.create({
-          data: {
-            title,
-            content,
-            published: false,
-            author: { connect: { id: Number(userId) } },
-          },
-        })
-      },
-    })
-
-    t.nullable.field('deletePost', {
-      type: 'Post',
-      args: { id: nonNull(intArg()) },
-      resolve: (parent, { id }, ctx) => {
-        return ctx.prisma.post.delete({
-          where: {
-            id,
-          },
-        })
-      },
-    })
-
-    t.nullable.field('publish', {
-      type: 'Post',
-      args: {
-        id: nonNull(intArg()),
-      },
-      resolve: (parent, { id }, ctx) => {
-        return ctx.prisma.post.update({
-          where: { id },
-          data: { published: true },
-        })
-      },
-    })
   },
 })
